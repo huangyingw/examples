@@ -29,6 +29,7 @@
 "./cassandra/java/src/test/java/io/k8s/cassandra/KubernetesSeedProviderTest.java"
 "./cassandra/java/src/test/resources/cassandra.yaml"
 "./cassandra/java/src/test/resources/logback-test.xml"
+"./cassandra/run.sh"
 "./code-of-conduct.md"
 "./fav.log.sort"
 "./guestbook-go/.gitignore"
