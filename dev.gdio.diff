@@ -1,0 +1,71 @@
+diff --git a/mysql-wordpress-pd/deploy.sh b/mysql-wordpress-pd/deploy.sh
+new file mode 100755
+index 0000000..fc0b29b
+--- /dev/null
++++ ./mysql-wordpress-pd/deploy.sh
+@@ -0,0 +1,9 @@
++#!/bin/zsh
++SCRIPT=$(realpath "$0")
++SCRIPTPATH=$(dirname "$SCRIPT")
++cd "$SCRIPTPATH"
++
++# https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-persistent-volume/
++kubectl apply -f local-volumes.yaml
++kubectl apply -k ./
++# kubectl patch svc wordpress -p '{"spec": {"type": "LoadBalancer", "externalIPs":["10.1.10.168"]}}'
+diff --git a/mysql-wordpress-pd/kustomization.yaml b/mysql-wordpress-pd/kustomization.yaml
+new file mode 100644
+index 0000000..f628ed3
+--- /dev/null
++++ ./mysql-wordpress-pd/kustomization.yaml
+@@ -0,0 +1,7 @@
++secretGenerator:
++- name: mysql-pass
++  literals:
++  - password=YOUR_PASSWORD
++resources:
++- mysql-deployment.yaml
++- wordpress-deployment.yaml
+diff --git a/mysql-wordpress-pd/local-volumes.yaml b/mysql-wordpress-pd/local-volumes.yaml
+index 8964113..29be841 100644
+--- ./mysql-wordpress-pd/local-volumes.yaml
++++ ./mysql-wordpress-pd/local-volumes.yaml
+@@ -10,7 +10,7 @@ spec:
+   accessModes:
+     - ReadWriteOnce
+   hostPath:
+-    path: /tmp/data/pv-1
++    path: /media/nvme/data/pv-1
+ ---
+ apiVersion: v1
+ kind: PersistentVolume
+@@ -24,4 +24,4 @@ spec:
+   accessModes:
+     - ReadWriteOnce
+   hostPath:
+-    path: /tmp/data/pv-2
++    path: /media/nvme/data/pv-2
+diff --git a/mysql-wordpress-pd/undeploy.sh b/mysql-wordpress-pd/undeploy.sh
+new file mode 100755
+index 0000000..1ef7fe5
+--- /dev/null
++++ ./mysql-wordpress-pd/undeploy.sh
+@@ -0,0 +1,6 @@
++#!/bin/zsh
++SCRIPT=$(realpath "$0")
++SCRIPTPATH=$(dirname "$SCRIPT")
++cd "$SCRIPTPATH"
++
++kubectl delete -k ./
+diff --git a/mysql-wordpress-pd/wordpress-deployment.yaml b/mysql-wordpress-pd/wordpress-deployment.yaml
+index 8b0f397..7901459 100644
+--- ./mysql-wordpress-pd/wordpress-deployment.yaml
++++ ./mysql-wordpress-pd/wordpress-deployment.yaml
+@@ -11,6 +11,7 @@ spec:
+     app: wordpress
+     tier: frontend
+   type: LoadBalancer
++  externalIPs: ["10.1.10.168", "192.168.3.2"]
+ ---
+ apiVersion: v1
+ kind: PersistentVolumeClaim
