@@ -1,13 +1,13 @@
-[remote "origin"]
+[remote "kubernetes"]
     url = git@github.com:kubernetes/examples.git
-    fetch = +refs/heads/*:refs/remotes/origin/*
+    fetch = +refs/heads/*:refs/remotes/kubernetes/*
 [remote "github"]
     url = git@github.com:huangyingw/examples.git
     fetch = +refs/heads/*:refs/remotes/github/*
 [push]
     remote = github
 [gsync]
-    remote = origin
+    remote = kubernetes
     branch = master
 [merge]
 	allow = true
@@ -15,7 +15,7 @@
     remote = github
     merge = refs/heads/dev
 [branch "master"]
-    remote = origin
+    remote = kubernetes
     merge = refs/heads/master
 [commit]
 	message = n
