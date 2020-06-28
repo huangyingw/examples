@@ -5,14 +5,14 @@
     url = git@github.com:huangyingw/examples.git
     fetch = +refs/heads/*:refs/remotes/github/*
 [push]
-    remote = github
+    remote = origin
 [gsync]
     remote = kubernetes
     branch = master
 [merge]
 	allow = true
 [branch "dev"]
-    remote = github
+    remote = origin
     merge = refs/heads/dev
 [branch "master"]
     remote = kubernetes
